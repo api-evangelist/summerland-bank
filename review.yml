@@ -1,0 +1,105 @@
+aid: summerland-bank
+name: Summerland Bank
+review:
+  question: Does Summerland Bank expose a live, public Consumer Data Right (CDR) Product Reference Data API, and is its contract bank-proprietary or the shared DSB standard?
+  answer: true
+  date: '2026-07-20'
+  reviewer: API Evangelist
+  specProvenanceNote: |
+    The Product Reference Data (PRD) surface is NOT a bank-proprietary API. It
+    conforms to the shared Data Standards Body (DSB) Consumer Data Standards
+    Banking OpenAPI (OpenAPI 3.0.3, title "CDR Banking API", version 1.36.0),
+    published at https://consumerdatastandardsaustralia.github.io/standards/.
+    Every Australian ADI implements the same normative contract; only the public
+    base host differs per data holder. No bank-authored OpenAPI/Swagger was found
+    for download, so the canonical DSB spec was harvested verbatim to
+    openapi/summerland-bank-cds-banking-products-openapi.yml and is clearly the
+    shared standard, not a Summerland Bank proprietary artifact.
+findings:
+  summary: |
+    Summerland Bank (customer-owned mutual ADI, APRA-regulated, certified B Corp,
+    ABN 21 087 650 360, AFSL/ACL 241167, formerly Summerland Credit Union)
+    participates in Australia's Consumer Data Right as a data holder. Its CDR
+    brand is registered on the ACCC CDR Register (dataHolderBrandId
+    fa919a73-7ba1-eb11-a821-000d3a884a20) with public base URI
+    https://public.cdr-api.summerland.com.au. It exposes the mandated public,
+    unauthenticated Product Reference Data (PRD) API at the CDS public base
+    https://public.cdr-api.summerland.com.au/cds-au/v1 (endpoints GET
+    /banking/products and GET /banking/products/{productId}). The endpoint was
+    confirmed LIVE on 2026-07-20: GET /banking/products with the mandatory CDS
+    `x-v: 5` header returned HTTP 200 and a JSON body with a data.products array
+    of 25 products spanning seven categories (TRANS_AND_SAVINGS_ACCOUNTS,
+    TERM_DEPOSITS, RESIDENTIAL_MORTGAGES, PERS_LOANS, BUSINESS_LOANS, OVERDRAFTS,
+    CRED_AND_CHRG_CARDS); the response carried the CDS `x-v: 5` header. A request
+    omitting the version header returned HTTP 406 (missing/unacceptable version),
+    the standard CDS negotiation behaviour. Consumer (non-public) CDR data —
+    transaction, account, and lending data — is available only to accredited data
+    recipients (ADRs) under the CDR's OAuth2 / OpenID Connect (FAPI-profiled)
+    consent and ADR accreditation model, exposed to eligible customers through the
+    Summerland Bank app and internet banking rather than as an open developer API.
+  developerPortal: |
+    Summerland Bank publishes an open-banking / CDR informational page at
+    https://www.summerland.com.au/services/digital-and-payments/open-banking/
+    describing the Consumer Data Right and the ACCC accreditation model. This is a
+    compliance/informational surface, not a full self-service developer portal
+    with API keys or an interactive console (as expected for a small mutual data
+    holder whose consumer APIs are gated behind CDR accreditation). No dedicated
+    developer.summerland.com.au portal, bank GitHub organisation, or downloadable
+    bank-specific API specification was found.
+  authModel:
+    publicPrd: none (unauthenticated public Product Reference Data)
+    consumerData: OAuth2 / OpenID Connect, CDR FAPI security profile, accredited data recipient (ADR) model under ACCC/OAIC governance
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://public.cdr-api.summerland.com.au/cds-au/v1
+      documented: true
+      note: Public CDR Product Reference Data base. GET /banking/products and GET /banking/products/{productId}. Mandatory x-v version header (current x-v 5).
+  endpointsConfirmed:
+    - GET https://public.cdr-api.summerland.com.au/cds-au/v1/banking/products
+    - GET https://public.cdr-api.summerland.com.au/cds-au/v1/banking/products/{productId}
+  probe:
+    url: https://public.cdr-api.summerland.com.au/cds-au/v1/banking/products
+    httpStatus: 200
+    responseXV: 5
+    productCount: 25
+    productCategories:
+      - TRANS_AND_SAVINGS_ACCOUNTS
+      - TERM_DEPOSITS
+      - RESIDENTIAL_MORTGAGES
+      - PERS_LOANS
+      - BUSINESS_LOANS
+      - OVERDRAFTS
+      - CRED_AND_CHRG_CARDS
+    interpretation: |
+      HTTP 200 with a populated data.products array (25 products) returned for a
+      GET carrying the mandatory CDS `x-v: 5` header, confirming a fully live PRD
+      endpoint. Without the header the host returned HTTP 406 (version not
+      acceptable) rather than a dead-host DNS failure, further confirming a
+      responding CDS implementation.
+sources:
+  - url: https://api.cdr.gov.au/cdr-register/v1/banking/data-holders/brands/summary
+    type: Reference
+    note: ACCC CDR Register (HTTP 200); lists brand "Summerland Bank" with publicBaseUri https://public.cdr-api.summerland.com.au and ABN 21087650360.
+  - url: https://public.cdr-api.summerland.com.au/cds-au/v1/banking/products
+    type: APIReference
+    note: Live public CDR PRD endpoint. HTTP 200 + 25 products with x-v 5 header (2026-07-20).
+  - url: https://www.summerland.com.au/services/digital-and-payments/open-banking/
+    type: Documentation
+    note: Summerland Bank open banking / Consumer Data Right page (HTTP 200); confirms data-holder posture and describes the ACCC accreditation / data-sharing model. Also references the planned merger with Regional Australia Bank.
+  - url: https://consumerdatastandardsaustralia.github.io/standards/
+    type: Documentation
+    note: DSB Consumer Data Standards; source of the shared CDR Banking OpenAPI 3.0.3 that the PRD conforms to.
+  - url: https://consumerdatastandardsaustralia.github.io/standards/includes/swagger/cds_banking.json
+    type: OpenAPI
+    note: Canonical DSB CDS Banking OpenAPI 3.0.3 (title "CDR Banking API", version 1.36.0), harvested verbatim into openapi/summerland-bank-cds-banking-products-openapi.yml. Shared standard, not bank-proprietary.
+actions:
+  openapiHarvested: true
+  openapiPath: openapi/summerland-bank-cds-banking-products-openapi.yml
+  reason: |
+    No bank-proprietary OpenAPI/Swagger is published for download. The PRD
+    conforms to the shared DSB CDS Banking OpenAPI 3.0.3 ("CDR Banking API",
+    v1.36.0, 16 paths including /banking/products), which was downloaded verbatim
+    from the DSB standards site and stored in openapi/. It is explicitly the
+    shared Consumer Data Standards contract implemented identically by every
+    Australian ADI, not a Summerland Bank artifact.
