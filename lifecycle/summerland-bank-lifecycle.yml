@@ -1,0 +1,36 @@
+generated: '2026-07-20'
+method: searched
+source: https://consumerdatastandardsaustralia.github.io/standards/
+notes: >-
+  Summerland Bank's public API surface is the shared DSB Consumer Data Standards
+  Banking contract; its lifecycle is governed centrally by the Data Standards
+  Body (DSB) rather than by a bank-proprietary versioning policy. Values below
+  reflect the CDS versioning/deprecation regime plus what Summerland publishes.
+versioning:
+  scheme: per-endpoint header negotiation (x-v / x-min-v)
+  current_prd_version: '5'
+  contract_version: 1.36.0
+  contract_title: CDR Banking API
+  docs: https://consumerdatastandardsaustralia.github.io/standards/#versioning
+deprecation:
+  policy: >-
+    Endpoint versions are deprecated and retired by the DSB through the Consumer
+    Data Standards maintenance process. Obsolete endpoint versions are published
+    (e.g. get-products v1/v2/v3) and holders negotiate the served version via the
+    x-v/x-min-v headers; unsupported versions return HTTP 406.
+  policy_url: https://consumerdatastandardsaustralia.github.io/standards/#versioning
+  sunset_header: false
+  obsolete_versions_documented: true
+sla:
+  documented: false
+  note: >-
+    CDS non-functional requirements set availability/performance obligations for
+    CDR data holders, governed by the ACCC; Summerland publishes no bank-specific
+    developer SLA for the public PRD.
+status_page:
+  url: null
+  note: No dedicated API/system status page was found for Summerland Bank.
+merger_note: >-
+  Summerland Bank has announced a planned merger with Regional Australia Bank,
+  which may affect the CDR brand/data-holder registration over time.
+deprecated_operations: []

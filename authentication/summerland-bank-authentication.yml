@@ -1,0 +1,36 @@
+generated: '2026-07-20'
+method: searched
+source: https://www.summerland.com.au/services/digital-and-payments/open-banking/
+notes: >-
+  The harvested OpenAPI is the shared DSB Consumer Data Standards Banking API
+  contract, which declares no securitySchemes of its own; authentication for the
+  Consumer Data Right is defined by the separate CDR information security (InfoSec)
+  profile, not the resource-endpoint spec. Summerland Bank operates two distinct
+  auth postures, captured below.
+summary:
+  types: [none, oauth2, openIdConnect, mutualTLS]
+  api_key_in: []
+  oauth2_flows: [authorizationCode]
+surfaces:
+  - name: Public Product Reference Data (PRD)
+    base_url: https://public.cdr-api.summerland.com.au/cds-au/v1
+    auth: none
+    description: >-
+      GET /banking/products and GET /banking/products/{productId} are public and
+      unauthenticated per the CDR PRD requirement. No API key, token, or client
+      registration is required; only the mandatory CDS `x-v` version header must
+      be supplied. Confirmed live 2026-07-20 (HTTP 200, x-v 5, 25 products).
+    operations: [listBankingProducts, getBankingProductDetail]
+  - name: Consumer data sharing (accredited data recipients)
+    base_url: https://mtls.dh.example.com/cds-au/v1
+    auth: oauth2 + openIdConnect + mutualTLS
+    profile: CDR InfoSec profile (FAPI 1.0 Advanced, OIDC Hybrid/PKCE, MTLS-bound tokens, JARM/PAR)
+    description: >-
+      Account, balance, transaction, direct-debit, scheduled-payment and payee
+      endpoints require an OAuth2 / OpenID Connect access token obtained by an
+      ACCC-accredited data recipient (ADR) under CDR consent, bound to the client
+      via mutual TLS. Not exposed as an open developer API; accessed by eligible
+      customers through the Summerland Bank app / internet banking. Governed by
+      the ACCC/OAIC and the DSB Consumer Data Standards security profile.
+    docs: https://consumerdatastandardsaustralia.github.io/standards/#security-profile
+schemes: []

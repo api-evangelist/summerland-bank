@@ -1,0 +1,51 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/summerland-bank-cds-banking-products-openapi.yml
+format: cds-error
+envelope: ResponseErrorListV2
+docs: https://consumerdatastandardsaustralia.github.io/standards/#error-codes
+notes: >-
+  Derived from the 4xx responses declared on the public PRD operations
+  (GET /banking/products, GET /banking/products/{productId}) in the shared DSB
+  CDS Banking contract. CDS uses URN-coded errors in a ResponseErrorListV2
+  envelope ({ errors: [ { code, title, detail, meta } ] }), NOT RFC 9457
+  application/problem+json. `urn` values below are the DSB standard error URNs.
+problems:
+  - status: 400
+    title: Invalid Field
+    urn: urn:au-cds:error:v2:field/Invalid
+    detail: A supplied query/path field value is invalid.
+    source_operation: openapi/summerland-bank-cds-banking-products-openapi.yml#listBankingProducts
+  - status: 400
+    title: Missing Required Field
+    urn: urn:au-cds:error:v2:field/Missing
+    detail: A mandatory field was not supplied.
+  - status: 400
+    title: Missing Required Header
+    urn: urn:au-cds:error:v2:header/Missing
+    detail: A mandatory header (e.g. x-v) was not supplied.
+  - status: 400
+    title: Invalid Version
+    urn: urn:au-cds:error:v2:header/InvalidVersion
+    detail: The x-v / x-min-v header value is not a positive integer.
+  - status: 400
+    title: Invalid Date
+    urn: urn:au-cds:error:v2:field/InvalidDateTime
+    detail: A supplied date/datetime field is malformed.
+  - status: 400
+    title: Invalid Page Size
+    urn: urn:au-cds:error:v2:field/InvalidPageSize
+    detail: page-size exceeds the maximum permitted value.
+  - status: 404
+    title: Resource Not Found
+    urn: urn:au-cds:error:v2:resource/NotFound
+    detail: The requested productId does not exist.
+    source_operation: openapi/summerland-bank-cds-banking-products-openapi.yml#getBankingProductDetail
+  - status: 406
+    title: Unsupported Version
+    urn: urn:au-cds:error:v2:header/UnsupportedVersion
+    detail: The requested endpoint version (x-v) is not supported by the holder. Returned when the x-v header is missing or names an unsupported version.
+  - status: 422
+    title: Invalid Page
+    urn: urn:au-cds:error:v2:field/InvalidPage
+    detail: The requested page number is out of range for the result set.

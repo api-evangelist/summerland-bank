@@ -1,0 +1,7 @@
+generated: '2026-07-20'
+method: generated
+skills:
+  - file: summerland-bank-product-reference-data.md
+    name: Query Summerland Bank product reference data
+    api: openapi/summerland-bank-cds-banking-products-openapi.yml
+    operations: [listBankingProducts, getBankingProductDetail]

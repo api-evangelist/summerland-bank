@@ -1,0 +1,52 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/summerland-bank-cds-banking-products-openapi.yml
+docs: https://consumerdatastandardsaustralia.github.io/standards/
+notes: >-
+  Standards conformance for Summerland Bank's CDR surface. The public PRD
+  conforms to the DSB Consumer Data Standards Banking contract; OAuth2/OIDC/FAPI
+  and MTLS conformance applies to the authenticated consumer-data endpoints under
+  the CDR InfoSec profile (accessed by accredited data recipients), not to the
+  public PRD. Regulatory posture (APRA ADI, CDR data holder) is a legal
+  obligation, not a self-published security certification.
+standards:
+  - id: cdr-consumer-data-standards
+    conforms: true
+    evidence: >-
+      Implements the DSB CDS Banking API (OpenAPI 3.0.3, "CDR Banking API"
+      v1.36.0); live PRD confirmed 2026-07-20 (HTTP 200, x-v 5, 25 products).
+  - id: cdr-versioning
+    conforms: true
+    evidence: x-v / x-min-v header negotiation; HTTP 406 on unsupported version.
+  - id: pagination-cds
+    conforms: true
+    evidence: page / page-size query params + meta.totalRecords / meta.totalPages.
+  - id: oauth2
+    conforms: true
+    scope: consumer-data endpoints only
+    evidence: CDR InfoSec profile mandates OAuth2 authorization-code for ADR access.
+  - id: openid-connect
+    conforms: true
+    scope: consumer-data endpoints only
+    evidence: CDR InfoSec profile mandates OIDC (Hybrid/PKCE) for consumer consent.
+  - id: fapi-1.0-advanced
+    conforms: true
+    scope: consumer-data endpoints only
+    evidence: CDR InfoSec profile is built on the FAPI 1.0 Advanced security profile.
+  - id: mutual-tls
+    conforms: true
+    scope: consumer-data endpoints only
+    evidence: MTLS-bound access tokens required for holder/recipient data exchange.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Uses CDS ResponseErrorListV2 URN-coded errors, not application/problem+json.
+  - id: json-api
+    conforms: false
+  - id: idempotency
+    conforms: false
+    evidence: Public PRD is read-only; no idempotency-key contract.
+regulatory:
+  - APRA-regulated authorised deposit-taking institution (ADI)
+  - CDR data holder (ACCC CDR Register brand fa919a73-7ba1-eb11-a821-000d3a884a20)
+  - Certified B Corporation
+  - AFSL / Australian Credit Licence 241167 (ABN 21 087 650 360)

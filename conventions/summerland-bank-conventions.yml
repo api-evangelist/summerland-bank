@@ -1,0 +1,63 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/summerland-bank-cds-banking-products-openapi.yml
+docs: https://consumerdatastandardsaustralia.github.io/standards/#introduction
+notes: >-
+  Cross-cutting request/response semantics of the Consumer Data Standards (CDS)
+  Banking API that Summerland Bank's public PRD surface implements. Derived from
+  the harvested OpenAPI parameters/schemas and the DSB standards. The public PRD
+  is read-only; there is no idempotency contract (no state-changing writes).
+authentication:
+  public_prd: none (unauthenticated)
+  consumer_data: OAuth2 / OIDC / MTLS (CDR InfoSec profile)
+  ref: authentication/summerland-bank-authentication.yml
+versioning:
+  style: header-negotiated
+  request_header: x-v
+  min_version_header: x-min-v
+  response_header: x-v
+  current_prd_version: '5'
+  negotiation: >-
+    Clients send the endpoint version in `x-v` (and optionally a minimum in
+    `x-min-v`); the holder responds with the served version in the `x-v` response
+    header, or HTTP 406 when the requested version is unsupported.
+  ref: lifecycle/summerland-bank-lifecycle.yml
+pagination:
+  style: page-number
+  params:
+    page: page (1-based page number)
+    page_size: page-size (records per page, max 1000)
+  response_fields:
+    - meta.totalRecords
+    - meta.totalPages
+    - links.first
+    - links.prev
+    - links.self
+    - links.next
+    - links.last
+  invalid_page_status: 422
+request_tracing:
+  header: x-fapi-interaction-id
+  behaviour: >-
+    Optional on request; echoed on the response. When absent the holder may
+    generate one. Used for end-to-end correlation across the CDR ecosystem.
+fapi_headers:
+  headers:
+    - x-fapi-auth-date
+    - x-fapi-customer-ip-address
+    - x-cds-client-headers
+  note: Applicable to authenticated consumer-data endpoints, not the public PRD.
+error_envelope:
+  schema: ResponseErrorListV2
+  shape: '{ errors: [ { code, title, detail, meta } ] }'
+  format: cds-error (URN-coded; not RFC 9457 problem+json)
+  ref: errors/summerland-bank-problem-types.yml
+rate_limiting:
+  documented: false
+  note: >-
+    No rate-limit headers are defined in the PRD contract; the CDS non-functional
+    requirements specify traffic-threshold obligations governed by the DSB rather
+    than per-response signalling.
+idempotency:
+  supported: false
+  note: Public PRD is read-only (GET); no idempotency-key contract applies.

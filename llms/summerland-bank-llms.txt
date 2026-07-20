@@ -1,0 +1,38 @@
+# Summerland Bank
+
+> Summerland Bank is a customer-owned (mutual) APRA-regulated authorised deposit-taking institution (ADI) and certified B Corporation based in Lismore, New South Wales, Australia (formerly Summerland Credit Union; ABN 21 087 650 360, AFSL/ACL 241167). Under Australia's Consumer Data Right (CDR / Open Banking) it is a registered data holder that exposes a live, public, unauthenticated Product Reference Data (PRD) API conforming to the DSB Consumer Data Standards.
+
+## Overview
+
+- Public PRD base URL: https://public.cdr-api.summerland.com.au/cds-au/v1
+- Contract: shared DSB "CDR Banking API" (OpenAPI 3.0.3, v1.36.0) — not bank-proprietary
+- Public operations (unauthenticated, require `x-v: 5` header): `GET /banking/products`, `GET /banking/products/{productId}`
+- Consumer data (accounts/transactions/balances/payees/direct-debits/scheduled-payments): accredited data recipients only, via OAuth2/OIDC/MTLS CDR consent — not an open developer API.
+
+## APIs
+
+- [Summerland Bank CDR Product Reference Data API](https://www.summerland.com.au/services/digital-and-payments/open-banking/): public product, fee, rate, and eligibility data under the CDR.
+
+## Specs
+
+- [OpenAPI (harvested DSB CDS Banking contract)](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/openapi/summerland-bank-cds-banking-products-openapi.yml)
+- [OpenAPI Overlay (AE enhancements)](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/overlays/summerland-bank-cds-banking-products-overlay.yaml)
+
+## Artifacts
+
+- [Authentication profile](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/authentication/summerland-bank-authentication.yml)
+- [API conventions](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/conventions/summerland-bank-conventions.yml)
+- [Error catalog](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/errors/summerland-bank-problem-types.yml)
+- [Lifecycle](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/lifecycle/summerland-bank-lifecycle.yml)
+- [Conformance](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/conformance/summerland-bank-conformance.yml)
+- [Data model](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/data-model/summerland-bank-data-model.yml)
+- [MCP server (candidate)](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/mcp/summerland-bank-mcp.yml)
+- [Domain security](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/security/summerland-bank-domain-security.yml)
+- [Agent skill: query products](https://raw.githubusercontent.com/api-evangelist/summerland-bank/refs/heads/main/skills/summerland-bank-product-reference-data.md)
+
+## Docs
+
+- [Open Banking / Consumer Data Right](https://www.summerland.com.au/services/digital-and-payments/open-banking/)
+- [DSB Consumer Data Standards](https://consumerdatastandardsaustralia.github.io/standards/)
+- [Privacy policy](https://www.summerland.com.au/privacy-policy/)
+- [Security hub](https://www.summerland.com.au/security-hub/)

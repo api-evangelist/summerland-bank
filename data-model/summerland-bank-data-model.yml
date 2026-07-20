@@ -1,0 +1,86 @@
+generated: '2026-07-20'
+method: derived
+source: openapi/summerland-bank-cds-banking-products-openapi.yml
+notes: >-
+  Entity-relationship graph derived from the CDS Banking schemas ($ref links and
+  id-reference fields). The public PRD exposes only the Product entities; the
+  Account/Transaction/Balance/DirectDebit/ScheduledPayment/Payee entities belong
+  to the authenticated consumer-data surface (accredited data recipients only)
+  and are included for completeness of the shared contract.
+entities:
+  - name: BankingProduct
+    id: productId (BankingProductId)
+    public: true
+    schema: BankingProductV6 / BankingProductDetailV7
+    key_fields: [productCategory, name, brand, isTailored, effectiveFrom, effectiveTo]
+    relationships:
+      - has_many: BankingProductFeature
+      - has_many: BankingProductConstraint
+      - has_many: BankingProductEligibility
+      - has_many: BankingProductFee
+      - has_many: BankingProductDepositRate
+      - has_many: BankingProductLendingRate
+      - has_one: BankingProductBundle
+  - name: BankingProductFee
+    schema: BankingProductFeeV2
+    relationships:
+      - has_many: BankingProductDiscount
+  - name: BankingProductRate
+    schema: BankingProductDepositRateV2 / BankingProductLendingRateV3
+    relationships:
+      - has_many: BankingProductRateTier (BankingProductRateTierV4)
+  - name: BankingAccount
+    id: accountId (BankingAccountId)
+    public: false
+    schema: BankingAccountV3 / BankingAccountDetailV5
+    relationships:
+      - belongs_to: BankingProduct
+        via: productCategory
+      - has_many: BankingTransaction
+        via: accountId
+      - has_one: BankingBalance
+        via: accountId
+      - has_many: BankingDirectDebit
+        via: accountId
+      - has_many: BankingScheduledPayment
+        via: accountId
+      - has_one: BankingTermDepositAccount
+      - has_one: BankingCreditCardAccount
+      - has_one: BankingLoanAccount (BankingLoanAccountV3)
+  - name: BankingTransaction
+    id: transactionId (BankingTransactionId)
+    public: false
+    schema: BankingTransactionV2 / BankingTransactionDetailV3
+    relationships:
+      - belongs_to: BankingAccount
+        via: accountId
+  - name: BankingBalance
+    public: false
+    schema: BankingBalance
+    relationships:
+      - belongs_to: BankingAccount
+        via: accountId
+      - has_many: BankingBalancePurse
+  - name: BankingDirectDebit
+    public: false
+    schema: BankingDirectDebit
+    relationships:
+      - belongs_to: BankingAccount
+        via: accountId
+      - has_one: BankingAuthorisedEntity
+  - name: BankingScheduledPayment
+    public: false
+    schema: BankingScheduledPaymentV2
+    relationships:
+      - belongs_to: BankingAccount
+        via: from.accountId
+      - has_many: BankingScheduledPaymentSet
+  - name: BankingPayee
+    id: payeeId
+    public: false
+    schema: BankingPayeeV2 / BankingPayeeDetailV2
+    relationships:
+      - has_one: BankingDomesticPayee
+      - has_one: BankingBillerPayee
+      - has_one: BankingInternationalPayee
+      - has_one: BankingDigitalWalletPayee
