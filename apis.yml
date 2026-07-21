@@ -182,6 +182,8 @@ apis:
     authorization consent under the ACCC/OAIC-governed ADR model. Contract is the
     shared DSB "CDR Banking API" v1.36.0 OpenAPI, not bank-proprietary.
 common:
+- type: AgenticAccess
+  url: agentic-access/summerland-bank-agentic-access.yml
 - type: DomainSecurity
   url: security/summerland-bank-domain-security.yml
 - type: Website
@@ -204,6 +206,8 @@ common:
   url: https://www.summerland.com.au/services/digital-and-payments/open-banking/
 - type: Authentication
   url: authentication/summerland-bank-authentication.yml
+- type: OAuthScopes
+  url: scopes/summerland-bank-scopes.yml
 - type: Conventions
   url: conventions/summerland-bank-conventions.yml
 - type: ErrorCatalog

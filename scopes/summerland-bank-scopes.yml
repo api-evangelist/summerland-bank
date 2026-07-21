@@ -1,0 +1,84 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/summerland-bank-cds-banking-products-openapi.yml
+docs: https://consumerdatastandardsaustralia.github.io/standards/#authorisation-scopes
+notes: >-
+  OAuth2 authorisation scopes for Summerland Bank's consumer-authorized CDR
+  banking endpoints. The harvested DSB Consumer Data Standards Banking OpenAPI
+  declares no `securitySchemes`, but each authenticated operation carries an
+  `x-scopes` extension naming the CDR banking scope it requires; those scopes are
+  the standard Consumer Data Right banking scopes defined by the Data Standards
+  Body. Authorisation is obtained through the CDR InfoSec profile (FAPI 1.0
+  Advanced OAuth2 authorization-code + OpenID Connect, MTLS-bound tokens),
+  discovered per data holder via OIDC — not a bank-published authorization/token
+  URL. The public Product Reference Data endpoints (listBankingProducts,
+  getBankingProductDetail) require no scope (unauthenticated).
+schemes:
+  - name: CDR-InfoSec-OAuth2
+    type: oauth2
+    source: openapi/summerland-bank-cds-banking-products-openapi.yml
+    profile: CDR InfoSec profile (FAPI 1.0 Advanced, OIDC Hybrid/PKCE, PAR, MTLS-bound tokens)
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: discovered-per-holder-via-oidc (/.well-known/openid-configuration on the CDR Resource/Auth base)
+        tokenUrl: discovered-per-holder-via-oidc
+        note: >-
+          Endpoints served on the bank's authenticated CDR Resource Base URI
+          (register-discovered by accredited data recipients). Authorization and
+          token endpoints are resolved through the holder's OIDC discovery
+          document, not published on the public PRD host.
+scopes:
+  - scope: bank:accounts.basic:read
+    description: >-
+      Read basic account information — account name, type, balance and masked
+      account number (Get Accounts, Get Account Balance, Get Bulk Balances,
+      Get Balances For Specific Accounts).
+    flows: [authorizationCode]
+    operations:
+      - listBankingAccounts
+      - listBankingBalancesBulk
+      - listBankingBalancesSpecificAccounts
+      - getBankingBalance
+    sources: [openapi/summerland-bank-cds-banking-products-openapi.yml]
+  - scope: bank:accounts.detail:read
+    description: >-
+      Read detailed account information including account numbers, features,
+      fees, and specific account terms (Get Account Detail).
+    flows: [authorizationCode]
+    operations:
+      - getBankingAccountDetail
+    sources: [openapi/summerland-bank-cds-banking-products-openapi.yml]
+  - scope: bank:transactions:read
+    description: >-
+      Read account transactions and transaction detail, with amount/date/text
+      filters (Get Transactions For Account, Get Transaction Detail).
+    flows: [authorizationCode]
+    operations:
+      - listBankingTransactions
+      - getBankingTransactionDetail
+    sources: [openapi/summerland-bank-cds-banking-products-openapi.yml]
+  - scope: bank:regular_payments:read
+    description: >-
+      Read regular payments — direct debits, scheduled payments, and instalment
+      plans (Get Direct Debits, Get Scheduled Payments, Get Instalment Plans and
+      their bulk/specific-account variants).
+    flows: [authorizationCode]
+    operations:
+      - listDirectDebits
+      - listDirectDebitsBulk
+      - listDirectDebitsSpecificAccounts
+      - listScheduledPayments
+      - listScheduledPaymentsBulk
+      - listScheduledPaymentsSpecificAccounts
+      - listInstalmentPlans
+      - listInstalmentPlansBulk
+    sources: [openapi/summerland-bank-cds-banking-products-openapi.yml]
+  - scope: bank:payees:read
+    description: >-
+      Read the consumer's saved payees — domestic, international, and BPAY
+      (Get Payees, Get Payee Detail).
+    flows: [authorizationCode]
+    operations:
+      - listBankingPayees
+      - getBankingPayeeDetail
+    sources: [openapi/summerland-bank-cds-banking-products-openapi.yml]
