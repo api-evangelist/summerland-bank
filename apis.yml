@@ -27,7 +27,7 @@ tags:
 - Australia
 - Mutual Bank
 created: '2026-07-20'
-modified: '2026-07-20'
+modified: '2026-07-21'
 specificationVersion: '0.19'
 apis:
 - aid: summerland-bank:summerland-bank-cdr-product-reference-data-api
@@ -40,7 +40,7 @@ apis:
   - Public
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://www.summerland.com.au/services/digital-and-payments/open-banking/
-  baseURL: https://public.cdr-api.summerland.com.au/cds-au/v1
+  baseURL: https://public.cdr-api.summerland.com.au/cds-au/v1/banking/products
   properties:
   - url: https://www.summerland.com.au/services/digital-and-payments/open-banking/
     type: Documentation
@@ -53,14 +53,134 @@ apis:
     Consumer Data Right. Serves GET /banking/products and GET
     /banking/products/{productId} at the CDS public base
     https://public.cdr-api.summerland.com.au/cds-au/v1, returning
-    machine-readable product, fee, rate, and eligibility data. Confirmed live on
-    2026-07-20: an unauthenticated GET with the mandatory CDS `x-v: 5` header
-    returned HTTP 200 with a data.products array of 25 products across seven
+    machine-readable product, fee, rate, and eligibility data. Re-confirmed live
+    on 2026-07-21: an unauthenticated GET with the mandatory CDS `x-v: 5` header
+    returned HTTP 200 with a data.products array of products across seven
     categories (transaction and savings accounts, term deposits, residential
     mortgages, personal loans, business loans, overdrafts, and credit/charge
     cards). The contract is the shared DSB Consumer Data Standards Banking
-    OpenAPI (OpenAPI 3.0.3, "CDR Banking API"), not a bank-proprietary
+    OpenAPI (OpenAPI 3.0.3, "CDR Banking API" v1.36.0), not a bank-proprietary
     specification.
+- aid: summerland-bank:summerland-bank-cdr-accounts-balances-api
+  name: Summerland Bank CDR Accounts & Balances API
+  tags:
+  - CDR
+  - Open Banking
+  - Banking
+  - Accounts
+  - Balances
+  - Consumer Authorized
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.summerland.com.au/services/digital-and-payments/open-banking/
+  baseURL: https://public.cdr-api.summerland.com.au/cds-au/v1/banking/accounts
+  properties:
+  - url: https://www.summerland.com.au/services/digital-and-payments/open-banking/
+    type: Documentation
+  - url: https://consumerdatastandardsaustralia.github.io/standards/#cdr-banking-api_get-accounts
+    type: APIReference
+  - url: openapi/summerland-bank-cds-banking-products-openapi.yml
+    type: OpenAPI
+  description: >-
+    Consumer-authorized CDR banking endpoints for account listing and balances,
+    part of the DSB Consumer Data Standards Banking API that Summerland Bank is
+    required to implement as a CDR data holder. Covers GET /banking/accounts
+    (Get Accounts), POST /banking/accounts/balances (Get Bulk Balances), GET
+    /banking/accounts/{accountId}/balance (Get Account Balance) and GET
+    /banking/accounts/{accountId} (Get Account Detail). Unlike the public PRD
+    surface, these endpoints are NOT publicly accessible: they are served on the
+    bank's authenticated CDR Resource Base URI (issued to accredited data
+    recipients via the CDR Register) and require an OAuth2/FAPI consumer
+    authorization consent under the ACCC/OAIC-governed ADR model. Contract is the
+    shared DSB "CDR Banking API" v1.36.0 OpenAPI, not bank-proprietary.
+- aid: summerland-bank:summerland-bank-cdr-transactions-api
+  name: Summerland Bank CDR Transactions API
+  tags:
+  - CDR
+  - Open Banking
+  - Banking
+  - Transactions
+  - Consumer Authorized
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.summerland.com.au/services/digital-and-payments/open-banking/
+  baseURL: https://public.cdr-api.summerland.com.au/cds-au/v1/banking/accounts/{accountId}/transactions
+  properties:
+  - url: https://www.summerland.com.au/services/digital-and-payments/open-banking/
+    type: Documentation
+  - url: https://consumerdatastandardsaustralia.github.io/standards/#cdr-banking-api_get-transactions-for-account
+    type: APIReference
+  - url: openapi/summerland-bank-cds-banking-products-openapi.yml
+    type: OpenAPI
+  description: >-
+    Consumer-authorized CDR banking endpoints for account transactions, part of
+    the DSB Consumer Data Standards Banking API implemented by Summerland Bank as
+    a CDR data holder. Covers GET /banking/accounts/{accountId}/transactions (Get
+    Transactions For Account, with amount/date/text filters) and GET
+    /banking/accounts/{accountId}/transactions/{transactionId} (Get Transaction
+    Detail). These endpoints are not publicly accessible; they are served on the
+    bank's authenticated CDR Resource Base URI (register-discovered) and require
+    an OAuth2/FAPI consumer authorization consent under the ACCC/OAIC-governed
+    ADR model. Contract is the shared DSB "CDR Banking API" v1.36.0 OpenAPI, not
+    bank-proprietary.
+- aid: summerland-bank:summerland-bank-cdr-direct-debits-scheduled-payments-api
+  name: Summerland Bank CDR Direct Debits & Scheduled Payments API
+  tags:
+  - CDR
+  - Open Banking
+  - Banking
+  - Direct Debits
+  - Scheduled Payments
+  - Consumer Authorized
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.summerland.com.au/services/digital-and-payments/open-banking/
+  baseURL: https://public.cdr-api.summerland.com.au/cds-au/v1/banking/accounts/direct-debits
+  properties:
+  - url: https://www.summerland.com.au/services/digital-and-payments/open-banking/
+    type: Documentation
+  - url: https://consumerdatastandardsaustralia.github.io/standards/#cdr-banking-api_get-direct-debits-for-account
+    type: APIReference
+  - url: openapi/summerland-bank-cds-banking-products-openapi.yml
+    type: OpenAPI
+  description: >-
+    Consumer-authorized CDR banking endpoints for direct debits and scheduled
+    payments, part of the DSB Consumer Data Standards Banking API implemented by
+    Summerland Bank as a CDR data holder. Covers GET
+    /banking/accounts/{accountId}/direct-debits and POST
+    /banking/accounts/direct-debits (Get Direct Debits), plus GET
+    /banking/accounts/{accountId}/payments/scheduled, GET
+    /banking/payments/scheduled and POST /banking/payments/scheduled (Get
+    Scheduled Payments). These endpoints are not publicly accessible; they are
+    served on the bank's authenticated CDR Resource Base URI (register-discovered)
+    and require an OAuth2/FAPI consumer authorization consent under the
+    ACCC/OAIC-governed ADR model. Contract is the shared DSB "CDR Banking API"
+    v1.36.0 OpenAPI, not bank-proprietary.
+- aid: summerland-bank:summerland-bank-cdr-payees-api
+  name: Summerland Bank CDR Payees API
+  tags:
+  - CDR
+  - Open Banking
+  - Banking
+  - Payees
+  - Consumer Authorized
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://www.summerland.com.au/services/digital-and-payments/open-banking/
+  baseURL: https://public.cdr-api.summerland.com.au/cds-au/v1/banking/payees
+  properties:
+  - url: https://www.summerland.com.au/services/digital-and-payments/open-banking/
+    type: Documentation
+  - url: https://consumerdatastandardsaustralia.github.io/standards/#cdr-banking-api_get-payees
+    type: APIReference
+  - url: openapi/summerland-bank-cds-banking-products-openapi.yml
+    type: OpenAPI
+  description: >-
+    Consumer-authorized CDR banking endpoints for saved payees, part of the DSB
+    Consumer Data Standards Banking API implemented by Summerland Bank as a CDR
+    data holder. Covers GET /banking/payees (Get Payees) and GET
+    /banking/payees/{payeeId} (Get Payee Detail), returning the consumer's saved
+    domestic, international, and BPAY payee records. These endpoints are not
+    publicly accessible; they are served on the bank's authenticated CDR Resource
+    Base URI (register-discovered) and require an OAuth2/FAPI consumer
+    authorization consent under the ACCC/OAIC-governed ADR model. Contract is the
+    shared DSB "CDR Banking API" v1.36.0 OpenAPI, not bank-proprietary.
 common:
 - type: DomainSecurity
   url: security/summerland-bank-domain-security.yml
