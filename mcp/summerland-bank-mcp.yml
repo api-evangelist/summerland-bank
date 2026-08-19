@@ -2,13 +2,11 @@ generated: '2026-07-20'
 method: derived
 status: candidate
 source: openapi/summerland-bank-cds-banking-products-openapi.yml
-notes: >-
-  No official hosted/remote MCP server was found for Summerland Bank. This is a
-  candidate tool list derived from the PUBLIC, unauthenticated Product Reference
-  Data operations only — the two endpoints an agent can call without CDR
-  accreditation. Consumer-data operations (accounts/transactions/balances/etc.)
-  are excluded because they require ADR accreditation + OAuth2/MTLS consent and
-  cannot be exposed as generic agent tools.
+notes: No official hosted/remote MCP server was found for Summerland Bank. This is a candidate tool list
+  derived from the PUBLIC, unauthenticated Product Reference Data operations only — the two endpoints
+  an agent can call without CDR accreditation. Consumer-data operations (accounts/transactions/balances/etc.)
+  are excluded because they require ADR accreditation + OAuth2/MTLS consent and cannot be exposed as generic
+  agent tools.
 server:
   name: summerland-bank-cdr-prd
   transport: http
@@ -17,15 +15,18 @@ server:
   required_headers:
     x-v: '5'
 tools:
-  - name: list_banking_products
-    description: >-
-      List Summerland Bank's publicly offered banking products (accounts, term
-      deposits, mortgages, personal/business loans, overdrafts, cards). Supports
-      product-category, effective, updated-since, brand filters and page/page-size
-      pagination.
-    source_operation: openapi/summerland-bank-cds-banking-products-openapi.yml#listBankingProducts
-  - name: get_banking_product_detail
-    description: >-
-      Retrieve full detail for a single product by productId, including features,
-      constraints, eligibility, fees, discounts, and deposit/lending rates.
-    source_operation: openapi/summerland-bank-cds-banking-products-openapi.yml#getBankingProductDetail
+- name: list_banking_products
+  description: List Summerland Bank's publicly offered banking products (accounts, term deposits, mortgages,
+    personal/business loans, overdrafts, cards). Supports product-category, effective, updated-since,
+    brand filters and page/page-size pagination.
+  source_operation: openapi/summerland-bank-cds-banking-products-openapi.yml#listBankingProducts
+- name: get_banking_product_detail
+  description: Retrieve full detail for a single product by productId, including features, constraints,
+    eligibility, fees, discounts, and deposit/lending rates.
+  source_operation: openapi/summerland-bank-cds-banking-products-openapi.yml#getBankingProductDetail
+deployment:
+  mode: none
+  verified: derived
+  tools: 2
+  checked: '2026-08-12'
+  source: catalog MCP census
