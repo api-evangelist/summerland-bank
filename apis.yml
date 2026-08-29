@@ -16,6 +16,18 @@ description: >-
   the Data Standards Body (DSB) Consumer Data Standards, and offers
   accredited-recipient consumer data sharing to eligible customers through its
   app and internet banking under the ACCC/OAIC-governed CDR regime.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
